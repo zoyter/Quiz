@@ -2,6 +2,7 @@ package ru.mauniver.kafit.student;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
@@ -22,7 +23,7 @@ public class MainActivity extends AppCompatActivity {
 
     //        Читы
     private Button mCheatButton;
-    private static final int REQUEST_CODE_CHEAT = 0;
+    private static final int REQUEST_CODE_CHEAT = 7877;
     private boolean mIsCheater;
 
 
@@ -57,8 +58,8 @@ public class MainActivity extends AppCompatActivity {
             } else {
                 messageResId = R.string.incorrect_toast;
             }
-            Toast.makeText(MainActivity.this, messageResId, Toast.LENGTH_SHORT).show();
         }
+        Toast.makeText(MainActivity.this, messageResId, Toast.LENGTH_SHORT).show();
     }
 
     @Override
@@ -135,21 +136,24 @@ public class MainActivity extends AppCompatActivity {
 
             }
         });
-
     }
-
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
+//        Log.d("My tag","onActivityResult");
         if (resultCode != MainActivity.RESULT_OK){
+            Log.d("My tag","RESULT_OK");
             return;
         }
+        Log.d("My tag","RESULT_CANCEL");
         if (resultCode == REQUEST_CODE_CHEAT){
             if (data == null){
                 return;
             }
             mIsCheater = CheatActivity.wasAnswerShown(data);
         }
+        mIsCheater = CheatActivity.wasAnswerShown(data);
+        Log.d("My tag",String.valueOf(mIsCheater));
     }
 
     // Сохранение данных между поворотами
