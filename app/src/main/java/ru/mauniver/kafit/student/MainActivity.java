@@ -21,13 +21,6 @@ public class MainActivity extends AppCompatActivity {
     private Button mPrevButton;
     private TextView mQuestionTextView;
 
-    //        Читы
-    private Button mCheatButton;
-    private static final int REQUEST_CODE_CHEAT = 7877;
-    private boolean mIsCheater;
-
-
-
     // Для сохранения данных между поворотами
     private static final String tag = "Quiz";
     private static final String KEY_INDEX = "index";
@@ -50,14 +43,10 @@ public class MainActivity extends AppCompatActivity {
     private void checkAnswer(boolean userPressedTrue){
         boolean answerIsTrue = mQuestionBank[mCurrentIndex].isAnswerTrue();
         int messageResId = 0;
-        if (mIsCheater) {
-            messageResId = R.string.judgment_toast;
-        }else{
-            if (userPressedTrue == answerIsTrue) {
-                messageResId = R.string.correct_toast;
-            } else {
-                messageResId = R.string.incorrect_toast;
-            }
+        if (userPressedTrue == answerIsTrue) {
+            messageResId = R.string.correct_toast;
+        } else {
+            messageResId = R.string.incorrect_toast;
         }
         Toast.makeText(MainActivity.this, messageResId, Toast.LENGTH_SHORT).show();
     }
@@ -99,9 +88,9 @@ public class MainActivity extends AppCompatActivity {
         mNextButton = (Button)findViewById(R.id.next_button);
         mNextButton.setOnClickListener(view->{
             mCurrentIndex = (mCurrentIndex+1)%mQuestionBank.length;
-            mIsCheater = false;
-//            int question = mQuestionBank[mCurrentIndex].getTextResId();
-//            mQuestionTextView.setText(question);
+
+    //      int question = mQuestionBank[mCurrentIndex].getTextResId();
+    //      mQuestionTextView.setText(question);
             updateQuestion();
         });
         updateQuestion();
@@ -118,42 +107,6 @@ public class MainActivity extends AppCompatActivity {
             };
             updateQuestion();
         });
-
-
-//        Читы
-        mCheatButton = (Button)findViewById(R.id.cheat_button);
-        mCheatButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                // Запуск CheatActivity
-//                Intent i = new Intent(MainActivity.this, CheatActivity.class);
-                boolean answerIsTrue = mQuestionBank[mCurrentIndex].
-                        isAnswerTrue();
-                Intent i = CheatActivity.newIntent(MainActivity.this,
-                        answerIsTrue);
-//                startActivity(i);
-                startActivityForResult(i, REQUEST_CODE_CHEAT);
-
-            }
-        });
-    }
-    @Override
-    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        super.onActivityResult(requestCode, resultCode, data);
-//        Log.d("My tag","onActivityResult");
-        if (resultCode != MainActivity.RESULT_OK){
-            Log.d("My tag","RESULT_OK");
-            return;
-        }
-        Log.d("My tag","RESULT_CANCEL");
-        if (resultCode == REQUEST_CODE_CHEAT){
-            if (data == null){
-                return;
-            }
-            mIsCheater = CheatActivity.wasAnswerShown(data);
-        }
-        mIsCheater = CheatActivity.wasAnswerShown(data);
-        Log.d("My tag",String.valueOf(mIsCheater));
     }
 
     // Сохранение данных между поворотами

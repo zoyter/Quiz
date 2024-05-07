@@ -13,13 +13,6 @@
         android:theme="@style/Theme.Quiz"
         tools:targetApi="31">
 
-        <!--    Читы -->
-        <activity
-            android:name=".CheatActivity"
-            android:exported="false"
-            android:label="@string/title_activity_cheat"/>
-
-
         <activity
             android:name=".MainActivity"
             android:exported="true">
