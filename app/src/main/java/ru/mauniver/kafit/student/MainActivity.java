@@ -1,6 +1,8 @@
 package ru.mauniver.kafit.student;
 
+import android.content.Intent;
 import android.os.Bundle;
+import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -17,6 +19,13 @@ public class MainActivity extends AppCompatActivity {
     private Button mNextButton;
     private Button mPrevButton;
     private TextView mQuestionTextView;
+
+    //        Читы
+    private Button mCheatButton;
+    private static final int REQUEST_CODE_CHEAT = 0;
+    private boolean mIsCheater;
+
+
 
     // Для сохранения данных между поворотами
     private static final String tag = "Quiz";
@@ -36,15 +45,20 @@ public class MainActivity extends AppCompatActivity {
         mQuestionTextView.setText(question);
     }
 
+//    Читы
     private void checkAnswer(boolean userPressedTrue){
         boolean answerIsTrue = mQuestionBank[mCurrentIndex].isAnswerTrue();
         int messageResId = 0;
-        if (userPressedTrue == answerIsTrue){
-            messageResId = R.string.correct_toast;
-        } else{
-            messageResId = R.string.incorrect_toast;
+        if (mIsCheater) {
+            messageResId = R.string.judgment_toast;
+        }else{
+            if (userPressedTrue == answerIsTrue) {
+                messageResId = R.string.correct_toast;
+            } else {
+                messageResId = R.string.incorrect_toast;
+            }
+            Toast.makeText(MainActivity.this, messageResId, Toast.LENGTH_SHORT).show();
         }
-        Toast.makeText(MainActivity.this, messageResId, Toast.LENGTH_SHORT).show();
     }
 
     @Override
@@ -84,6 +98,7 @@ public class MainActivity extends AppCompatActivity {
         mNextButton = (Button)findViewById(R.id.next_button);
         mNextButton.setOnClickListener(view->{
             mCurrentIndex = (mCurrentIndex+1)%mQuestionBank.length;
+            mIsCheater = false;
 //            int question = mQuestionBank[mCurrentIndex].getTextResId();
 //            mQuestionTextView.setText(question);
             updateQuestion();
@@ -102,6 +117,39 @@ public class MainActivity extends AppCompatActivity {
             };
             updateQuestion();
         });
+
+
+//        Читы
+        mCheatButton = (Button)findViewById(R.id.cheat_button);
+        mCheatButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                // Запуск CheatActivity
+//                Intent i = new Intent(MainActivity.this, CheatActivity.class);
+                boolean answerIsTrue = mQuestionBank[mCurrentIndex].
+                        isAnswerTrue();
+                Intent i = CheatActivity.newIntent(MainActivity.this,
+                        answerIsTrue);
+//                startActivity(i);
+                startActivityForResult(i, REQUEST_CODE_CHEAT);
+
+            }
+        });
+
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (resultCode != MainActivity.RESULT_OK){
+            return;
+        }
+        if (resultCode == REQUEST_CODE_CHEAT){
+            if (data == null){
+                return;
+            }
+            mIsCheater = CheatActivity.wasAnswerShown(data);
+        }
     }
 
     // Сохранение данных между поворотами

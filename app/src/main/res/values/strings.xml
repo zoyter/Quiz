@@ -13,4 +13,11 @@
     <string name="question_africa">Исток реки Нил находится в Египте.</string>
     <string name="question_americas">Амазонка самая длинная река Америки.</string>
     <string name="question_asia">Озеро Байкал самое старое и глубокое озеро в мире с чистой водой.</string>
+
+    <!--    Читы -->
+    <string name="warning_text">Are you sure you want to do this?</string>
+    <string name="show_answer_button">Show Answer</string>
+    <string name="cheat_button">Cheat!</string>
+    <string name="judgment_toast">Cheating is wrong.</string>
+    <string name="title_activity_cheat">Подсказка</string>
 </resources>
